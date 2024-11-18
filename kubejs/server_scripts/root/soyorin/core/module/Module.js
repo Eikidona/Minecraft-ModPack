@@ -1,0 +1,7 @@
+/**
+ * @class
+ * @classdesc
+ */
+function $Module() {
+  
+}
