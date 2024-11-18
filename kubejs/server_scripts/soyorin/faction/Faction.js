@@ -1,18 +1,42 @@
-// priority: 2000
-
 /**
  * @class
- * @classdesc 
- * @param {Special.EntityType[]} entities 
- * @param {$FactionRelation} factionRelation 
+ * @classdesc
  */
-function $Faction(entities, factionRelation) {
-  this.entities = new Set(entities);
-  this.factionRelation = factionRelation;
+function $Faction() {
+  /**
+   * @type {ResourceLocation}
+   */
+  this.name;
+  /**
+   * @type {Set<Special.EntityType>}
+   */
+  this.defaultEntities;
+  /**
+   * @type {ResourceLocation[]}
+   */
+  this.homeDimensions;
+  /**
+   * @type {Internal.CompoundTag}
+   */
+  this.banner;
+  /**
+   * @type {$RaidConfig}
+   */
+  this.raidConfig;
+  /**
+   * @type {$BoostConfig}
+   */
+  this.boostConfig;
+  /**
+   * @type {$FactionRelations}
+   */
+  this.relations;
+  /**
+   * @type {ResourceLocation}
+   */
+  this.activationAdvancement;
 }
-$Faction.prototype.getEntities = function () {
-  return this.entities;
-}
-$Faction.prototype.getFactionRelation = function () {
-  return this.factionRelation;
+
+$Faction.prototype.getName = function () {
+  return this.name;
 }
