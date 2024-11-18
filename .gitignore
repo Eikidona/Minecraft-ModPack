@@ -1,25 +1,20 @@
 #忽略全部
 /*
 
-#需要的文件夹
-## Mods
-!/mods/
-## 不要添加的mod
-mods/*zmedievalmusic*.jar
-mods/*AmbientSounds*.jar
-mods/.connector*
-mods/*.jar.disabled
-
-## Config
-!/config/
-
-## KubeJS
+# KubeJS
 !/kubejs/
+## 白名单
+/kubejs/*
+!/kubejs/client_scripts/
+!/kubejs/server_scripts/
+!/kubejs/startup_scripts/
 
-## 其他
-!/options.txt
-!/README.md
-# !/TODO.md
-!/.gitignore
+# Mods
+!/mods/
+## 白名单
+/mods/*
 
-#忽略
+# Config
+!/config/
+## 白名单
+/config/*

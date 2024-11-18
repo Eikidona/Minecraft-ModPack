@@ -3,5 +3,5 @@ EntityEvents.spawned(event => {
   let mobEntity = event.getEntity();
   if (!mobEntity instanceof Mob) return;
 
-  mobEntity.
+  mobEntity.getPersistentData().putString('Faction', $FactionManager.getEntityFaction(mobEntity))
 })
