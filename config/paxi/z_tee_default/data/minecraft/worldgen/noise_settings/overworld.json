@@ -126,16 +126,13 @@
               "if_true": {
                 "type": "minecraft:biome",
                 "biome_is": [
-                  "wythers:coastal_mangroves",
-                  "wythers:black_beach",
+                  
+                  
                   "wythers:black_river",
-                  "wythers:tropical_beach",
-                  "minecraft:beach",
+                  
+                  
                   "wythers:jungle_river",
-                  "minecraft:warm_ocean",
-                  "minecraft:lukewarm_ocean",
-                  "minecraft:ocean",
-                  "minecraft:cold_ocean",
+
                   "wythers:tropical_forest_river",
                   "minecraft:river",
                   "wythers:badlands_river",
@@ -143,8 +140,7 @@
                   "wythers:lantern_river",
                   "minecraft:frozen_river",
                   "wythers:icy_river",
-                  "wythers:gravelly_beach",
-                  "minecraft:snowy_beach",
+                  
                   "wythers:salt_lakes_white",
                   "wythers:salt_lakes_pink",
                   "wythers:salt_lakes_turquoise",

@@ -1,6 +1,8 @@
 {
   "pack": {
     "pack_format": 15,
-    "description": "扩展的生物圈调整"
+    "description": {
+      "text": "Expaned Ecosphere的地形调整"
+    }
   }
 }
