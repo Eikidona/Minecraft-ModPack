@@ -1,7 +1,0 @@
-/**
- * @class
- * @classdesc
- */
-function $Factions() {
-  
-}

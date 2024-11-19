@@ -1,3 +1,4 @@
+// priority: 1000
 /**
  * @class
  * @classdesc
@@ -86,3 +87,5 @@ $FactionRelations.prototype.initiateActualRelations = function (targetRelations)
   targetRelations.forEach((relation, factionName) => this.actualRelations.set(String(factionName), relation));
   this.originalRelations.forEach((relation, factionName) => this.actualRelations.set(String(factionName), relation));
 }
+
+$FactionRelations.DEFAULT = new $FactionRelations([], []);
