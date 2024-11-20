@@ -1,42 +1,18 @@
 /**
  * @class
- * @classdesc
  */
 function $Factions() {
+
+}
+
+const UNDEAD = new $Faction(new ResourceLocation("faction", "undead"), $FactionType.MONSTER, new CompoundTag(), $FactionRaidConfig.DEFAULT, $FactionBoostConfig.DEFAULT, $FactionRelations.DEFAULT, [], new ResourceLocation("faction", "default"), [new ResourceLocation("minecraft", "overworld")], new Set(["minecraft:zombie", "minecraft:husk", "minecraft:skeleton"]))
+
+// register factions...
+$Factions.register = function () {
+  // console.log("注册中...")
+  $FactionRegistry.register(UNDEAD)
+}
+$Factions.register();
+// ServerEvents.lowPriorityData(event => {
   
-}
-
-/**
- * @type {Map<string, $Faction>}
- */
-$Factions.FACTION_DATA = new Map();
-
-/**
- * 
- * @param {$Faction} faction 
- */
-$Factions.register = function (faction) {
-  this.FACTION_DATA.set(String(faction.getName()), faction);
-}
-
-/**
- * 
- * @param {ResourceLocation} factionName 
- * @returns {$Faction} 
- */
-$Factions.getFaction = function (factionName) {
-  return this.FACTION_DATA.get(String(factionName)) ?? $Faction.GAIA;
-}
-
-$Factions.factionExists = function (factionName) {
-  return this.FACTION_DATA.has(String(factionName));
-}
-
-$Factions.getFactionKeys = function () {
-  return this.FACTION_DATA.keys();
-}
-
-$Factions.getFactionData = function () {
-  return this.FACTION_DATA.values();
-}
-
+// })
