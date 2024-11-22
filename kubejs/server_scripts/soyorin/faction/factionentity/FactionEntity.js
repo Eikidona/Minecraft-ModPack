@@ -35,7 +35,8 @@ function $FactionEntity(entity) {
    */
   this.isStuck = false;
 
-  this.deserializeNBT(entity.getPersistentData());
+  this.deserializeNBT(entity.getPersistentData()); // 从数据创建
+  $FactionEntity.VALUES.set(String(this.entity.getStringUuid()), this);
 }
 
 /**
@@ -115,6 +116,15 @@ $FactionEntity.prototype.setFactionEntityRank = function (factionEntityRank) {
 }
 
 /**
+ * 
+ * @param {$FactionEntityRank} factionEntityRank 
+ * @returns {boolean}
+ */
+$FactionEntity.prototype.hasRank = function (factionEntityRank) {
+  return this.factionEntityRank == factionEntityRank;
+}
+
+/**
  * 反序列化为对象
  * @param {Internal.CompoundTag} nbt 
  */
@@ -162,17 +172,7 @@ $FactionEntity.prototype.serializeNBT = function () {
   return nbt;
 }
 
-// $FactionEntity.prototype.attachEntity = function () {
-//   if (this.faction) {
-//     this.entity.getPersistentData().putString("Faction", String(this.faction.getName()));
-//   }
-//   if (this.factionEntity) {
-//     this.entity.getPersistentData().putString("FactionEntity", String(this.factionEntity.getName()));
-//   }
-//   if (this.factionEntityRank) {
-//     this.entity.getPersistentData().putString("FactionEntityRank", String(this.factionEntityRank.getName()));
-//   }
-//   if (this.factionEntityType) {
-//     this.entity.getPersistentData().putString("FactionEntityType", String(this.factionEntityType.getName()));
-//   }
-// }
+/**
+ * @type {Map<string, $FactionEntity>} Entity String Uuid : FactionEntity
+ */
+$FactionEntity.VALUES = new Map();

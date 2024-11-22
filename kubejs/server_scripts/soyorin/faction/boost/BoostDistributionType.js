@@ -2,6 +2,7 @@
 /**
  * @class
  * @classdesc 提升分布类型
+ * @enum
  * @param {string} name 
  */
 function $BoostDistributionType(name) {

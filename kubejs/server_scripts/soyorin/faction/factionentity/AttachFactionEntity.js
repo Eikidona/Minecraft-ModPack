@@ -26,22 +26,13 @@ EntityEvents.spawned(event => {
 
   // 合并NBT
   mobEntity.getPersistentData().merge(factionEntity.serializeNBT());
-
-
 })
 
-// PlayerEvents.chat(event => {
-//   /**
-//    * @type {Internal.ServerPlayer}
-//    */
-//   let player = event.entity;
-
-//   let tag1 = new CompoundTag();
-//   let tag2 = new CompoundTag();
-//   tag1.putString("Test", "test_test");
-//   tag2.putInt("Level", 0);
-//   tag1.merge(tag2);
-
-//   console.log(tag1.toString())
-
-// })
+/**
+ * Save
+ */
+LevelEvents.unloaded(event=>{
+  $FactionEntity.VALUES.forEach((factionEntity, stringUuid) => {
+    factionEntity.getEntity().getPersistentData().merge(factionEntity.serializeNBT());
+  })
+})

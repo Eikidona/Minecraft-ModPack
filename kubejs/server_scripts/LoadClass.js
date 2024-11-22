@@ -13,16 +13,28 @@ const EntityType = Java.loadClass('net.minecraft.world.entity.EntityType');
 const Optional = Java.loadClass('java.util.Optional');
 const ForgeRegistryTagManager = Java.loadClass('net.minecraftforge.registries.ForgeRegistryTagManager');
 const Collectors = Java.loadClass('java.util.stream.Collectors');
-
+const ServerBossEvent = Java.loadClass("net.minecraft.server.level.ServerBossEvent");
+const NaturalSpawner = Java.loadClass("net.minecraft.world.level.NaturalSpawner")
+const SpawnPlacements = Java.loadClass("net.minecraft.world.entity.SpawnPlacements");
+const ClientboundSoundPacket = Java.loadClass("net.minecraft.network.protocol.game.ClientboundSoundEntityPacket");
+const SoundSource = Java.loadClass("net.minecraft.sounds.SoundSource");
+const GameRules = Java.loadClass("net.minecraft.world.level.GameRules");
+const Heightmap$Types = Java.loadClass("net.minecraft.world.level.levelgen.Heightmap$Types");
+const MutableBlockPos = Java.loadClass("net.minecraft.core.BlockPos$MutableBlockPos");
 const CompoundTag = Java.loadClass('net.minecraft.nbt.CompoundTag');
 const StringTag = Java.loadClass('net.minecraft.nbt.StringTag');
-// const CollectionTag = Java.loadClass('net.minecraft.nbt.CollectionTag');
-// const ByteArrayTag = Java.loadClass('net.minecraft.nbt.ByteArrayTag');
-// const DoubleTag = Java.loadClass('net.minecraft.nbt.DoubleTag');
-// const FloatTag = Java.loadClass('net.minecraft.nbt.FloatTag');
-// const IntArrayTag = Java.loadClass('net.minecraft.nbt.IntArrayTag');
-// const IntTag = Java.loadClass('net.minecraft.nbt.IntTag');
-// const ListTag = Java.loadClass('net.minecraft.nbt.ListTag');
-// const LongArrayTag = Java.loadClass('net.minecraft.nbt.LongArrayTag');
-// const LongTag = Java.loadClass('net.minecraft.nbt.LongTag');
+const CollectionTag = Java.loadClass('net.minecraft.nbt.CollectionTag');
+const ByteArrayTag = Java.loadClass('net.minecraft.nbt.ByteArrayTag');
+const DoubleTag = Java.loadClass('net.minecraft.nbt.DoubleTag');
+const FloatTag = Java.loadClass('net.minecraft.nbt.FloatTag');
+const IntArrayTag = Java.loadClass('net.minecraft.nbt.IntArrayTag');
+const IntTag = Java.loadClass('net.minecraft.nbt.IntTag');
+const ListTag = Java.loadClass('net.minecraft.nbt.ListTag');
+const LongArrayTag = Java.loadClass('net.minecraft.nbt.LongArrayTag');
+const LongTag = Java.loadClass('net.minecraft.nbt.LongTag');
+const NbtUtils = Java.loadClass("net.minecraft.nbt.NbtUtils");
+const GoalUtils = Java.loadClass("net.minecraft.world.entity.ai.util.GoalUtils");
+
+const OpenDoorGoal = Java.loadClass("net.minecraft.world.entity.ai.goal.OpenDoorGoal");
+
 

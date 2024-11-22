@@ -3,17 +3,20 @@
  * @class
  * @classdesc
  */
-function $FactionEntityHelper() {
-  
+function $FactionEntityHelper () {
+
 }
 
 /**
  * 
  * @param {Internal.Mob} entity 
+ * @returns {$FactionEntity}
  */
 $FactionEntityHelper.getFactionEntity = function (entity) {
-  // let factionEntity = new $FactionEntity(entity);
-  // let persistentData = entity.getPersistentData();
-  // factionEntity.deserializeNBT(persistentData);
-  return new $FactionEntity(entity);
+    let factionEntity = $FactionEntity.VALUES.get(String(entity.getStringUuid()));
+
+    // let factionEntity = new $FactionEntity(entity);
+    // let persistentData = entity.getPersistentData();
+    // factionEntity.deserializeNBT(persistentData);
+    return factionEntity ? factionEntity : new $FactionEntity(entity);
 }

@@ -1,6 +1,8 @@
 // priority: 1000
 /**
  * @class
+ * @classdesc
+ * @enum
  * @param {string} name 
  */
 function $FactionType(name) {
