@@ -32,9 +32,15 @@ const IntTag = Java.loadClass('net.minecraft.nbt.IntTag');
 const ListTag = Java.loadClass('net.minecraft.nbt.ListTag');
 const LongArrayTag = Java.loadClass('net.minecraft.nbt.LongArrayTag');
 const LongTag = Java.loadClass('net.minecraft.nbt.LongTag');
+
 const NbtUtils = Java.loadClass("net.minecraft.nbt.NbtUtils");
 const GoalUtils = Java.loadClass("net.minecraft.world.entity.ai.util.GoalUtils");
 
 const OpenDoorGoal = Java.loadClass("net.minecraft.world.entity.ai.goal.OpenDoorGoal");
+const MobSpawnType = Java.loadClass("net.minecraft.world.entity.MobSpawnType");
+const Difficulty = Java.loadClass("net.minecraft.world.Difficulty");
+const LivingEntity = Java.loadClass("net.minecraft.world.entity.LivingEntity");
+const MobEffectInstance = Java.loadClass("net.minecraft.world.effect.MobEffectInstance");
+const ServerPlayer = Java.loadClass("net.minecraft.server.level.ServerPlayer");
 
 

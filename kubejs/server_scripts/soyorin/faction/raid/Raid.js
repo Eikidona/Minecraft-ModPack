@@ -153,7 +153,176 @@ $Raid.prototype.addFactions = function (factions) {
 }
 
 $Raid.prototype.tick = function () {
+    if (!this.isStopped()) {
 
+        /**
+         * debug
+         */
+        console.log("Raid is ticking...");
+        console.log(`this status: ${this.status == $RaidStatus.ONGOING}`);
+
+        if (this.factions.length = 0) {
+
+            /**
+             * debug
+             */
+            console.log("Raid is stop, factions.length = 0");
+
+            this.stop();
+        }
+        if (this.status == $RaidStatus.ONGOING) {
+
+            /**
+             * debug
+             */
+            console.log("Raid status is ONGOING!")
+
+            let flag = this.active; // 标记 active 执行中标记
+            this.active = this.level.hasChunkAt(this.raidTarget.getTargetBlockPos()); // 区块是否被加载
+            if (this.level.getDifficulty() == Difficulty.PEACEFUL) { // 和平难度停止执行
+                this.stop();
+                return;
+            }
+            if (flag != this.active) { // 区块加载和执行中两者任一不满足退出
+
+                /**
+                 * debug
+                 */
+                console.log("Raid is stoped, flag != this.active")
+
+                return;
+            }
+
+            this.raidTarget.updateTargetBlockPos(this.level); // 更新目标位置
+
+            /**
+             * 失败
+             */
+            if (this.raidTarget.isDefeat(this, this.level)) {
+                if (this.groupsSpawned > 0) {
+                    this.status = $RaidStatus.LOSS;
+                    this.playSound(this.raidTarget.getTargetBlockPos(), this.factions[0].getRaidConfig().getDefeatSoundEvent());
+                    this.raidEvent.setName(this.getRaidEventNameDefeat(this.raidTarget));
+                } else {
+                    this.stop();
+                }
+            }
+
+            this.ticksActive++;
+            if (this.ticksActive >= 48000) {
+                this.stop();
+
+                /**
+                 * debug
+                 */
+                console.log("raid ticks active is >= 48000, stop.");
+
+                return;
+            }
+
+            let i = this.getTotalRaidersAlive();
+            if (i == 0 && this.hasMoreWaves()) {
+                if (this.raidCooldownTick()) {
+
+                    /**
+                     * debug
+                     */
+                    console.log("raid cooldown tick...");
+
+                    return;
+                }
+            }
+
+            /**
+             * 更新数据
+             */
+            if (this.ticksActive % 20 == 0) {
+                this.updatePlayers();
+                this.updateRaiders();
+                if (i > 0) {
+                    if (i <= 2) {
+                        this.raidEvent.setName(this.getRaidEventName(this.raidTarget).copy().append(" - ").append(Component.translatable("event.minecraft.raid.raiders_remaining", i)));
+                    } else {
+                        this.raidEvent.setName(this.getRaidEventName(this.raidTarget));
+                    }
+                } else {
+                    this.raidEvent.setName(this.getRaidEventName(this.raidTarget));
+                }
+            }
+
+            let flag3 = false;
+            let k = 0;
+
+            while (this.shouldSpawnGroup()) {
+                console.log("<while>");
+                for (let j = this.waveSpawnPos.length; j < this.factions.length; j++) {
+                    let randomSpawnPos = this.findRandomSpawnPos(k, 20);
+                    if (randomSpawnPos) {
+                        this.waveSpawnPos.push(randomSpawnPos);
+                    }
+                }
+                if (this.waveSpawnPos.length >= this.factions.length) { // 波次生成位置数量大于等于阵营数量 开始生成
+                    this.started = true;
+                    this.spawnGroup();
+                    if (!flag3) {
+                        // 这里曾Post Event
+                        flag3 = true;
+                    }
+                } else { // 否则继续尝试
+                    k++;
+                }
+
+                if (k > 3) { // 尝试此处抵达上限 停止
+                    this.stop();
+                    break;
+                }
+            }
+
+            if (this.isStarted() && !this.hasMoreWaves() && i == 0) {
+                if (this.postRaidTicks < 40) {
+                    this.postRaidTicks++;
+                } else {
+                    this.status = $RaidStatus.VICTORY;
+                    // Post Event 此处曾经
+                    this.playSound(this.raidTarget.getTargetBlockPos(), this.factions[0].getRaidConfig().getVictorySoundEvent());
+                    this.raidEvent.setName(this.getRaidEventNameVictory(this.raidTarget));
+
+                    for (let uuid of this.heroesOfTheVillage) {
+                        /**@type {Internal.LivingEntity} */
+                        let entity = this.level.getEntity(uuid);
+                        if (entity instanceof LivingEntity && !entity.isSpectator()) {
+                            entity.addEffect(new MobEffectInstance("minecraft:hero_of_the_village", 48000, this.badOmenLevel - 1, false, false, true));
+                            if (entity instanceof ServerPlayer) {
+                                /**@type {Internal.ServerPlayer} */
+                                let serverPlayer = entity;
+                                serverPlayer.awardStat(Stats.RAID_WIN);
+                                // CriteriaTriggers.RAID_WIN.trigger(serverplayerentity);
+                            }
+                        }
+                    }
+                }
+            }
+        } else if (this.isOver()) {
+            this.celebrationTicks++;
+            if (this.celebrationTicks >= 600) {
+                this.stop();
+                return;
+            }
+
+            if (this.celebrationTicks % 20 == 0) {
+                this.updatePlayers();
+                this.raidEvent.setVisible(true);
+                if (this.isVictory()) {
+                    this.raidEvent.setProgress(0.0);
+                    this.raidEvent.setName(this.getRaidEventNameVictory(this.raidTarget));
+                } else {
+                    this.raidEvent.setName(this.getRaidEventNameDefeat(this.raidTarget));
+                }
+            }
+        }
+
+
+    }
 }
 
 /**
@@ -178,8 +347,11 @@ $Raid.prototype.playSound = function (blockpos, soundEvent) {
         }
     }
 }
-
-$Raid.prototype.raidCooldownTicks = function () {
+/**
+ * 
+ * @returns {boolean}
+ */
+$Raid.prototype.raidCooldownTick = function () {
     if (this.raidCooldownTicks <= 0) {
         if (this.raidCooldownTicks == 0 && this.groupsSpawned > 0) {
             this.raidCooldownTicks = 300;
@@ -226,7 +398,12 @@ $Raid.prototype.raidCooldownTicks = function () {
     return false;
 }
 
+/**
+ * @description 应该生成？
+ * @returns {boolean}
+ */
 $Raid.prototype.shouldSpawnGroup = function () {
+    // 冷却时间清空 && 已生成数量小于总数量 && 袭击者总存活数为0
     return this.raidCooldownTicks == 0 && (this.groupsSpawned < this.numGroups) && this.getTotalRaidersAlive() == 0;
 }
 
@@ -245,7 +422,7 @@ $Raid.prototype.spawnGroup = function () {
     factionFractions.forEach((value, faction) => this.spawnGroupForFaction(this.waveSpawnPos.shift(), waveNumber, value, faction));
 
     this.waveSpawnPos.length = 0;
-    ++this.groupsSpawned;
+    this.groupsSpawned++;
     this.updateBossbar();
 }
 
@@ -465,10 +642,17 @@ $Raid.prototype.findRandomSpawnPos = function (outerAttempt, maxInnerAttempts) {
     let i = 2 - outerAttempt;
     let blockpos$mutable = new MutableBlockPos();
 
-    for (let i = 0; i < maxInnerAttempts; i++) {
-        let f = this.level.random.nextFloat() * (Math.PI * 2.0);
+    for (let i1 = 0; i1 < maxInnerAttempts; i1++) {
+        
+        let f = this.level.random.nextFloat() * 3.1415926 * 2.0;
         let j = this.raidTarget.getTargetBlockPos().getX() + Math.floor(Math.cos(f) * this.raidTarget.getSpawnDistance() * i + this.level.random.nextInt(5));
         let l = this.raidTarget.getTargetBlockPos().getZ() + Math.floor(Math.cos(f) * this.raidTarget.getSpawnDistance() * i + this.level.random.nextInt(5));
+
+        /**
+         * debug
+         */
+        console.log(`| f: ${f} | j: ${j} | l: ${l}`);
+
         let k = this.level.getHeight("world_surface", j, l);
         blockpos$mutable.set(j, k, l);
         if (this.isValidSpawnPos(blockpos$mutable) && this.raidTarget.isValidSpawnPos(outerAttempt, blockpos$mutable, this.level)) {
@@ -483,7 +667,7 @@ $Raid.prototype.findRandomSpawnPos = function (outerAttempt, maxInnerAttempts) {
  * @param {Internal.BlockPos$MutableBlockPos} blockpos$mutable 
  */
 $Raid.prototype.isValidSpawnPos = function (blockpos$mutable) {
-    return this.waveSpawnPos.map(existingWaveSpawnPos => blockpos$mutable.distSqr(existingWaveSpawnPos) > 40).reduce((previousValue, currentValue) => { return previousValue && currentValue })
+    return this.waveSpawnPos.map(existingWaveSpawnPos => blockpos$mutable.distSqr(existingWaveSpawnPos) > 40).reduce((previousValue, currentValue) => { return previousValue && currentValue }, true);
 }
 
 /**
@@ -561,7 +745,7 @@ $Raid.prototype.updatePlayers = function () {
  * @returns {number}
  */
 $Raid.prototype.getTotalRaidersAlive = function () {
-    return Array.from(this.groupRaiderMap.values()).map((setMobEntity) => setMobEntity.size()).reduce((previousValue, currentValue) => previousValue + currentValue);
+    return Array.from(this.groupRaiderMap.values()).map((setMobEntity) => setMobEntity.size()).reduce((previousValue, currentValue) => previousValue + currentValue, 0);
 }
 
 /**
@@ -581,56 +765,75 @@ $Raid.prototype.stop = function () {
     this.status = $RaidStatus.STOPPED;
 }
 
-$Raid.prototype.addHeroOfTheVillage = function () {
-    
+/**
+ * 
+ * @param {Internal.ServerPlayer} player 
+ */
+$Raid.prototype.addHeroOfTheVillage = function (player) {
+    this.heroesOfTheVillage.add(player.getUuid());
 }
 
 $Raid.prototype.isBetweenWaves = function () {
-
+    return this.hasFirstWaveSpawned() && this.getTotalRaidersAlive() == 0 && this.raidCooldownTicks > 0;
 }
 
 $Raid.prototype.hasFirstWaveSpawned = function () {
-
+    return this.groupsSpawned > 0;
 }
 
 $Raid.prototype.isStarted = function () {
-
+    return this.started;
 }
 
 $Raid.prototype.isActive = function () {
-
+    return this.active;
 }
 
 $Raid.prototype.isStopped = function () {
-
+    return this.status == $RaidStatus.STOPPED;
 }
 
 $Raid.prototype.isVictory = function () {
-
+    return this.status == $RaidStatus.VICTORY;
 }
 
 $Raid.prototype.isLoss = function () {
-
+    return this.status == $RaidStatus.LOSS;
 }
 
 $Raid.prototype.isOver = function () {
-
+    return this.isVictory() || this.isLoss();
 }
 
-$Raid.prototype.getRaidEventName = function () {
-
+/**
+ * 
+ * @param {$RaidTarget} raidTarget 
+ */
+$Raid.prototype.getRaidEventName = function (raidTarget) {
+    return raidTarget.getRaidType() == $RaidTargetType.BATTLE ? Component.translatable("event.faction.battle") : this.factions[0].getRaidConfig().getRaidBarNameComponent();
 }
 
-$Raid.prototype.getRaidEventNameDefeat = function () {
-
+/**
+ * 
+ * @param {$RaidTarget} raidTarget 
+ */
+$Raid.prototype.getRaidEventNameDefeat = function (raidTarget) {
+    return raidTarget.getRaidType() == $RaidTargetType.BATTLE ? Component.translatable("event.faction.battle.over") : this.factions[0].getRaidConfig().getRaidBarDefeatComponent();
 }
 
-$Raid.prototype.getRaidEventNameVictory = function () {
-
+/**
+ * 
+ * @param {$RaidTargetType} raidTarget 
+ */
+$Raid.prototype.getRaidEventNameVictory = function (raidTarget) {
+    return raidTarget.getRaidType() == $RaidTargetType.BATTLE ? Component.translatable("event.faction.battle.over") : this.factions[0].getRaidConfig().getRaidBarVictoryComponent();
 }
 
 $Raid.prototype.endWave = function () {
-
+    let raidersInWave = this.getRaidersInWave(this.getGroupsSpawned());
+    if (raidersInWave) {
+        raidersInWave.forEach(mobEntity => mobEntity.kill());
+    }
 }
 
 /**
@@ -645,7 +848,13 @@ $Raid.prototype.spawnDigger = function (faction, spawnBlocksPos, mob) {
     let weightMap = faction.getWeightMap(entityWeightMapProperties);
 
     if (!weightMap) return;
+    /**@type {$FactionEntityType} */
+    let randomEntry = GeneralUtils.getRandomEntry(weightMap, this.level.random);
+    let entity = randomEntry.createEntity(this.level, faction, spawnBlocksPos, false, $FactionEntityRank.DIGGER, MobSpawnType.PATROL);
 
+    if (entity instanceof Mob) {
+        this.joinRaid(this.getGroupsSpawned(), mob);
+    }
 
 }
 

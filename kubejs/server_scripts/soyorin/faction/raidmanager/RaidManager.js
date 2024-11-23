@@ -18,7 +18,7 @@ function $RaidManager (level) {
      */
     this.tickCount;
 
-    console.log("新建RaidManager实例");
+    // console.log("新建RaidManager实例");
     this.deserializeNBT(this.level.getPersistentData()); // 从现有数据创建...
     $RaidManager.VALUES.set(String(this.level.dimension), this);
 }
@@ -46,6 +46,7 @@ $RaidManager.prototype.tick = function () {
         }
 
         if (raid.isStopped()) {
+            this.level.server.tell("Raid is Stopped!")
             this.raidMap.delete(raid.getId());
             // this.raidMap.forEach((raidInstance, id, map) => {
             //     if (raidInstance == raid) {
@@ -197,10 +198,12 @@ $RaidManager.prototype.serializeNBT = function () {
     for (let raid of this.raidMap.values()) {
         let compoundNBT = new CompoundTag();
         raid.save(compoundNBT);
+        console.log(`${compoundNBT.toString()}`)
         listNBT.add(compoundNBT);
     }
 
     nbt.put("Raids", listNBT);
+    console.log(`${nbt.toString()}`);
     return nbt;
 }
 
@@ -209,15 +212,16 @@ $RaidManager.prototype.serializeNBT = function () {
  * @param {Internal.CompoundTag} nbt 
  */
 $RaidManager.prototype.deserializeNBT = function (nbt) {
+    
     this.nextAvailavleID = nbt.getInt("NextAvailableID");
     this.tickCount = nbt.getInt("Tick");
     let listNBT = nbt.getList("Raids", 10);
-
+    console.log(`反序列化RaidManager中 | listNBT size: ${listNBT.size()}`);
     for (let index = 0; index < listNBT.size(); index++) {
         listNBT.getCompound(i);
 
         let raid = $Raid.of(this.level, nbt);
-
+        console.log(`反序列化Raid中 ${raid instanceof $Raid}`);
         this.raidMap.set(raid.getId(), raid);
 
     }

@@ -20,7 +20,7 @@ $RaidStatus.byName = function (name) {
       break;
     }
   }
-  return raidStatus ?? $RaidStatus.ONGOIONG;
+  return raidStatus ?? $RaidStatus.ONGOING;
 }
 
 $RaidStatus.prototype.getName = function () {
@@ -32,9 +32,9 @@ $RaidStatus.prototype.getName = function () {
  */
 $RaidStatus.VALUES = [];
 
-$RaidStatus.ONGOIONG = new $RaidStatus("ongoing");
+$RaidStatus.ONGOING = new $RaidStatus("ongoing");
 $RaidStatus.VICTORY = new $RaidStatus("victory");
 $RaidStatus.LOSS = new $RaidStatus("loss");
 $RaidStatus.STOPPED = new $RaidStatus("stopped");
 
-$RaidStatus.VALUES.push($RaidStatus.ONGOIONG, $RaidStatus.VICTORY, $RaidStatus.LOSS, $RaidStatus.STOPPED);
+$RaidStatus.VALUES.push($RaidStatus.ONGOING, $RaidStatus.VICTORY, $RaidStatus.LOSS, $RaidStatus.STOPPED);
