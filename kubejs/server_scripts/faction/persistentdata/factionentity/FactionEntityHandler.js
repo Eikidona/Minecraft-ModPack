@@ -3,7 +3,8 @@ EntityEvents.spawned(event => {
     let livingEntity = event.entity;
     if (!livingEntity instanceof LivingEntity) return;
 
-    let factionEntity = new $FactionEntity(livingEntity);
+    // let factionEntity = new $FactionEntity(livingEntity);
+    let factionEntity = $FactionEntityHelper.getFactionEntity(livingEntity);
     factionEntity.save();
 })
 

@@ -7,12 +7,12 @@
 function $FactionEntity(livingEntity) {
     this.livingEntity = livingEntity;
     /**@type {$Faction} */
-    this.faction = $Factions.GAIA; 
+    this.faction = $Factions.GAIA;
     /**@type {BlockPos} */
     this.targetPosition;
 
     this.load();
-    $FactionEntity.addFactionEntity( this);
+    $FactionEntity.addFactionEntity(this);
 }
 
 /**
@@ -43,11 +43,19 @@ $FactionEntity.prototype.setFaction = function (faction) {
  * @param {Internal.CompoundTag} nbt 
  */
 $FactionEntity.prototype.deserializeNBT = function (nbt) {
-    if (nbt.contains("Faction")) {
-        this.faction = $Factions.getFaction(new ResourceLocation(nbt.getString("Faction")));
+    /**@type {Internal.CompoundTag} */
+    let factionEntity;
+    if (nbt.contains("FactionEntity")) {
+        factionEntity = nbt.getCompound("FactionEntity");
     }
-    if (nbt.contains("TargetPosition")) {
-        this.targetPosition = BlockPos.of(nbt.getLong("TargetPosition"));
+
+    if (factionEntity) {
+        if (factionEntity.contains("Faction")) {
+            this.faction = $Factions.getFaction(new ResourceLocation(nbt.getString("Faction")));
+        }
+        if (factionEntity.contains("TargetPosition")) {
+            this.targetPosition = BlockPos.of(nbt.getLong("TargetPosition"));
+        }
     }
 }
 
@@ -56,14 +64,16 @@ $FactionEntity.prototype.deserializeNBT = function (nbt) {
  * @returns {Internal.CompoundTag} 
  */
 $FactionEntity.prototype.serializeNBT = function () {
-    let nbt = new CompoundTag();
+    let compoundTag = new CompoundTag();
+    let factionEntity = new CompoundTag();
     if (this.faction) {
-        nbt.putString("Faction", String(this.faction.getName()))
+        factionEntity.putString("Faction", String(this.faction.getName()))
     }
     if (this.targetPosition) {
-        nbt.putLong("TargetPosition", this.targetPosition.asLong());
+        factionEntity.putLong("TargetPosition", this.targetPosition.asLong());
     }
-    return nbt;
+    compoundTag.put("FactionEntity", factionEntity)
+    return compoundTag;
 }
 
 /**

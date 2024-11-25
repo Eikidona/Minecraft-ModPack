@@ -28,21 +28,37 @@ $RaidManager.prototype.getLevel = function () {
 $RaidManager.prototype.getRaid = function (id) {
     return this.raids.get(id);
 }
-
-$RaidManager.prototype.deserializeNBT = function () {
-    
+/**
+ * @description 反序列化
+ * @param {Internal.CompoundTag} compoundTag
+ */
+$RaidManager.prototype.deserializeNBT = function (compoundTag) {
+    if (compoundTag.contains("RaidManager")) {
+        compoundTag.getCompound("RaidManager").getList("Raids", 10).forEach(raidNBT => {
+            let raid = new $Raid();
+            raid.deserializeNBT(raidNBT);
+            this.raids.set(raid.getId(), raid);
+        })
+    }
 }
-
+/**
+ * @description 序列化
+ * @returns {Internal.CompoundTag}
+ */
 $RaidManager.prototype.serializeNBT = function () {
-    
+    let compoundTag = new CompoundTag();
+    let raidsListTag = new ListTag();
+    Array.from(this.raids.values()).forEach(raid => raidsListTag.add(raid.serializeNBT()));
+    compoundTag.put("Raids", raidsListTag);
+
 }
 
 $RaidManager.prototype.load = function () {
-    
+    this.level.getPersistentData().merge(this.serializeNBT());
 }
 
 $RaidManager.prototype.save = function () {
-    
+    this.deserializeNBT(this.level.getPersistentData());
 }
 
 
