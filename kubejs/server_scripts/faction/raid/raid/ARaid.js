@@ -202,7 +202,7 @@ $Raid.prototype.spawnWaves = function () {
     /**
      * 寻找生成位置
      */
-
+    let blockpos = this.getCenter();
     /**
      * 获取生成实体权重表
      */
