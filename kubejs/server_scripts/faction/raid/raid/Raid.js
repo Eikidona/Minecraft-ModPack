@@ -1,8 +1,7 @@
 
 /**
  * @class
- * @classdesc 袭击类
- * @abstract 
+ * @classdesc 袭击
  * @param {number} id
  * @param {Internal.ServerLevel} level 
  */
@@ -56,8 +55,24 @@ function $Raid(id, level) {
     this.totalHealth = 0;
     /**
      * @description 已经生成的波次
+     * @type {number}
      */
     this.wavesSpawned = 0;
+    /**
+    * @description 总波次
+    * @type {number}
+    */
+    this.totalWaves = 0;
+    /**
+     * @description 强度
+     * @type {number}
+     */
+    this.strength = 0;
+    /**
+     * @description 等级
+     * @type {number}
+     */
+    this.badOmenLevel = 1;
 }
 /**
  * @description 获取中心位置
@@ -193,16 +208,55 @@ $Raid.prototype.lossCondition = function () {
  * @returns {boolean}
  */
 $Raid.prototype.hasMoreWaves = function () {
+    return this.wavesSpawned < this.totalWaves;
+}
+/**
+ * @description 强度计算
+ */
+$Raid.prototype.computedStrength = function () {
+    /**@type {$FactionEntity[]} */
+    let factionEntity = [];
+    this.level.getEntitiesWithin(AABB.ofSize(this.getCenter(), 56, 56, 56)).forEach(/**@param {Internal.Mob} mobEntity */mobEntity => {
+        if (mobEntity instanceof Mob) {
+            factionEntity.push($FactionEntityHelper.getFactionEntity(mobEntity));
+        }
+    });
 
+}
+/**
+ * @description 寻找随机生成位置
+ * @param {number} offsetMultiplier 
+ * @param {number} maxTry
+ * @returns {Internal.BlockPos$MutableBlockPos | undefined}
+ */
+$Raid.prototype.findRandomSpawnPos = function (offsetMultiplier, maxTry) {
+    let offset = offsetMultiplier == 0 ? 2 : 2 - offsetMultiplier;
+    /**
+     * 寻找生成位置
+     */
+    blockpos$mutableblockpos = new MutableBlockPos();
+
+    // let offsetMultiplier = 1; // 偏移值
+    let blockpos = this.getCenter();
+
+    for (let tryCount = 0; tryCount < maxTry; tryCount++) {
+        let randomNumber = this.level.random.nextFloat() * (JavaMath.PI * 2);
+
+        let x = blockpos.getX() + Mth.floor(Mth.cos(randomNumber) * 32.0 * offset) + this.level.random.nextInt(5);
+        let z = blockpos.getZ() + Mth.floor(Mth.cos(randomNumber) * 32.0 * offset) + this.level.random.nextInt(5);
+        let y = this.level.getHeight(Heightmap$Types.WORLD_SURFACE, x, z);
+
+        blockpos$mutableblockpos.set(x, y, z);
+        if (this.level.hasChunkAt(blockpos$mutableblockpos.getX() - 10, blockpos$mutableblockpos.getZ() - 10), blockpos$mutableblockpos.getX() + 10, blockpos$mutableblockpos.getZ() + 10) {
+            return blockpos$mutableblockpos;
+        }
+    }
+    return;
 }
 /**
  * @description 生成波次
  */
 $Raid.prototype.spawnWaves = function () {
-    /**
-     * 寻找生成位置
-     */
-    let blockpos = this.getCenter();
     /**
      * 获取生成实体权重表
      */
@@ -335,8 +389,8 @@ $Raid.prototype.tick = function () {
 $Raid.RAID_NAME_COMPONENT = Component.translatable("event.minecraft.raid");
 $Raid.VICTORY = Component.translatable("event.minecraft.raid.victory");
 $Raid.DEFEAT = Component.translatable("event.minecraft.raid.defeat");
-$Raid.RAID_BAR_VICTORY_COMPONENT = RAID_NAME_COMPONENT.copy().append(" - ").append(VICTORY);
-$Raid.RAID_BAR_DEFEAT_COMPONENT = RAID_NAME_COMPONENT.copy().append(" - ").append(DEFEAT);
+$Raid.RAID_BAR_VICTORY_COMPONENT = $Raid.RAID_NAME_COMPONENT.copy().append(" - ").append($Raid.VICTORY);
+$Raid.RAID_BAR_DEFEAT_COMPONENT = $Raid.RAID_NAME_COMPONENT.copy().append(" - ").append($Raid.DEFEAT);
 /**
  * @type {(value: number) => Internal.MutableComponent}
  * @description 剩下的Raiders 显示组件

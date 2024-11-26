@@ -7,9 +7,9 @@ function $FactionEntityHelper() {
 
 /**
  * 
- * @param {Internal.LivingEntity} livingEntity 
+ * @param {Internal.Mob} modEntity 
  */
-$FactionEntityHelper.getFactionEntity = function (livingEntity) {
-    let factionEntity = $FactionEntity.getFactionEntity(livingEntity);
-    return factionEntity ? factionEntity : new $FactionEntity(livingEntity);
+$FactionEntityHelper.getFactionEntity = function (modEntity) {
+    let factionEntity = $FactionEntity.getFactionEntity(modEntity);
+    return factionEntity ? factionEntity : new $FactionEntity(modEntity);
 }

@@ -1,27 +1,27 @@
 EntityEvents.spawned(event => {
     /**@type {Internal.LivingEntity} */
-    let livingEntity = event.entity;
-    if (!livingEntity instanceof LivingEntity) return;
+    let mobEntity = event.entity;
+    if (!mobEntity instanceof Mob) return;
 
     // let factionEntity = new $FactionEntity(livingEntity);
-    let factionEntity = $FactionEntityHelper.getFactionEntity(livingEntity);
+    let factionEntity = $FactionEntityHelper.getFactionEntity(mobEntity);
     factionEntity.save();
 })
 
 EntityEvents.death(event => {
-    /**@type {Internal.LivingEntity} */
-    let livingEntity = event.entity;
-    if (!(livingEntity instanceof LivingEntity) || livingEntity instanceof ServerPlayer) return;
+    /**@type {Internal.Mob} */
+    let modEntity = event.entity;
+    if (!modEntity instanceof Mob) return;
 
-    $FactionEntity.removeFactionEntity(livingEntity);
+    $FactionEntity.removeFactionEntity(modEntity);
 })
 
 NativeEvents.onEventTyped("normal", false, LivingChangeTargetEvent, /**@param {Internal.LivingChangeTargetEvent} event */event => {
-    /**@type {Internal.LivingEntity} */
+    /**@type {Internal.Mob} */
     let sourceEntity = event.getEntity();
-    /**@type {Internal.LivingEntity} */
+    /**@type {Internal.Mob} */
     let targetEntity = event.getNewTarget();
-    if (targetEntity instanceof ServerPlayer || !(sourceEntity instanceof LivingEntity) || !(targetEntity instanceof LivingEntity)) return;
+    if (targetEntity instanceof ServerPlayer || !(sourceEntity instanceof Mob) || !(targetEntity instanceof Mob)) return;
     let sourceFactionEntity = $FactionEntityHelper.getFactionEntity(sourceEntity);
     let targetFactionEntity = $FactionEntityHelper.getFactionEntity(targetEntity);
 
@@ -31,11 +31,11 @@ NativeEvents.onEventTyped("normal", false, LivingChangeTargetEvent, /**@param {I
 })
 
 NativeEvents.onEventTyped("normal", true, LivingAttackEvent, /**@param {Internal.LivingAttackEvent} event */ event => {
-    /**@type {Internal.LivingEntity} */
+    /**@type {Internal.Mob} */
     let sourceEntity = event.getEntity();
-    /**@type {Internal.LivingEntity} */
+    /**@type {Internal.Mob} */
     let targetEntity = event.getSource().getActual();
-    if (sourceEntity instanceof ServerPlayer || !(sourceEntity instanceof LivingEntity) || !(targetEntity instanceof LivingEntity)) return;
+    if (sourceEntity instanceof ServerPlayer || !(sourceEntity instanceof Mob) || !(targetEntity instanceof Mob)) return;
     let sourceFactionEntity = $FactionEntityHelper.getFactionEntity(sourceEntity);
     let targetFactionEntity = $FactionEntityHelper.getFactionEntity(targetEntity);
 

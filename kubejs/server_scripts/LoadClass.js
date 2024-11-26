@@ -43,8 +43,13 @@ const LivingEntity = Java.loadClass("net.minecraft.world.entity.LivingEntity");
 const MobEffectInstance = Java.loadClass("net.minecraft.world.effect.MobEffectInstance");
 const ServerPlayer = Java.loadClass("net.minecraft.server.level.ServerPlayer");
 const ServerLevel = Java.loadClass("net.minecraft.server.level.ServerLevel");
+const Mth = Java.loadClass("net.minecraft.util.Mth");
 /**
  * Forge Events
  */
 const LivingChangeTargetEvent = Java.loadClass("net.minecraftforge.event.entity.living.LivingChangeTargetEvent");
 const LivingAttackEvent = Java.loadClass("net.minecraftforge.event.entity.living.LivingAttackEvent");
+/**
+ * Java Util
+ */
+// const JavaMath = Java.loadClass("java.lang.Math");

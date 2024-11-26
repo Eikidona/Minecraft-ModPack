@@ -1,10 +1,10 @@
 /**
  * @class
  * @classdesc LivingEntity in raid
- * @param {Internal.LivingEntity} livingEntity 
+ * @param {Internal.Mob} livingEntity 
  */
 function $Raider(livingEntity) {
-    /**@type {Internal.LivingEntity} 实体 */
+    /**@type {Internal.Mob} 实体 */
     this.livingEntity = livingEntity;
      /**@type {$Raid} 袭击 */
     this.raid;
@@ -12,7 +12,7 @@ function $Raider(livingEntity) {
 
 /**
  * @description 获取实体
- * @returns {Internal.LivingEntity}
+ * @returns {Internal.Mob}
  */
 $Raider.prototype.getEntity = function () {
     return this.livingEntity;
@@ -74,7 +74,7 @@ $Raider.addRaider = function (raider) {
 
 /**
  * @description 尝试获取指定实体的Raider
- * @param {Internal.LivingEntity} livingEntity 
+ * @param {Internal.Mob} livingEntity 
  * @returns {$Raider | undefined}
  */
 $Raider.getRaider = function (livingEntity) {
@@ -83,7 +83,7 @@ $Raider.getRaider = function (livingEntity) {
 
 /**
  * @description 尝试删除指定实体的Raider
- * @param {Internal.LivingEntity} livingEntity 
+ * @param {Internal.Mob} livingEntity 
  * @returns {boolean}
  */
 $Raider.getRaider = function (livingEntity) {

@@ -9,7 +9,17 @@ function $Factions() {
 /**@type {Map<string, $Faction>} */
 $Factions.FACTION_DATA = new Map();
 
-$Factions.GAIA = new $Faction(new ResourceLocation("faction:gaia"), $FactionRelations.DEFAULT);
+$Factions.GAIA = $Factions.register(new $Faction(new ResourceLocation("faction:gaia"), $FactionRelations.DEFAULT));
+
+/**
+ * @description 注册
+ * @param {$Faction} faction 
+ * @returns {$Faction}
+ */
+$Factions.register = function (faction) {
+    this.FACTION_DATA.set(String(faction.getName()), faction);
+    return faction;
+}
 
 /**
  * @description 根据name获取Faction实例
