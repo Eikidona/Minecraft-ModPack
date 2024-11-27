@@ -89,7 +89,7 @@ $Faction.prototype.deserializeNBT = function (compoundTag) {
         this.name = new ResourceLocation(compoundTag.getString("Name"));
     }
     if (compoundTag.contains("Relations")) {
-        let relations = new $FactionRelations();
+        let relations = new $FactionRelations([], []);
         relations.deserializeNBT(compoundTag);
         this.relations = relations;
     }

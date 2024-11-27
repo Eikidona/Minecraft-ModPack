@@ -138,7 +138,7 @@ $FactionRelations.prototype.serializeNBT = function () {
  */
 $FactionRelations.prototype.deserializeNBT = function (compoundTag) {
     if (compoundTag.contains("Relations")) {
-        compoundTag.getList("Relations").forEach(relationNBT => {
+        compoundTag.getList("Relations", 10).forEach(relationNBT => {
             let relation = new $FactionRelation();
             relation.deserializeNBT(relationNBT);
             this.actualRelations.set(String(relation.getFactionName()), relation);

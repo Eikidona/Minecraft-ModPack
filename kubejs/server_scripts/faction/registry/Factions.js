@@ -1,4 +1,4 @@
-// priority: 1000
+// priority: 2000
 /**
  * @class
  */
@@ -8,8 +8,6 @@ function $Factions() {
 
 /**@type {Map<string, $Faction>} */
 $Factions.FACTION_DATA = new Map();
-
-$Factions.GAIA = $Factions.register(new $Faction(new ResourceLocation("faction:gaia"), $FactionRelations.DEFAULT));
 
 /**
  * @description 注册
@@ -26,7 +24,12 @@ $Factions.register = function (faction) {
  * @param {ResourceLocation} name 
  */
 $Factions.getFaction = function (name) {
-    return this.FACTION_DATA.get(String(name)) ?? this.GAIA;
+    let faction = this.FACTION_DATA.get(String(name));
+    // /**
+    //  * debug
+    //  */
+    // console.log(`调用此处: 类型判断: <faction: ${faction instanceof $Faction}> | <GAIA: ${this.GAIA instanceof $Faction}}>`)
+    return faction ? faction : this.GAIA;
 }
 
 /**
@@ -91,3 +94,5 @@ $Factions.load = function (server) {
     let data = server.getPersistentData();
     this.deserializeNBT(data);
 }
+
+$Factions.GAIA = $Factions.register(new $Faction(new ResourceLocation("faction:gaia"), $FactionRelations.DEFAULT));

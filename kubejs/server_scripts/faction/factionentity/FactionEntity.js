@@ -9,12 +9,18 @@ function $FactionEntity(modEntity) {
      * @description 实体
      * @type {Internal.Mob}
      */
-    this.mobEntity = modEntity;
+    this.entity = modEntity;
     /**
      * @description 阵营
      * @type {$Faction}
      */
     this.faction = $Factions.GAIA;
+
+    // /**
+    //  * debug
+    //  */
+    // console.log(`Debug: 类型检查 ${this.faction instanceof $Faction}`);
+
     /**
      * @description 类型
      * @type {$FactionEntityType}
@@ -30,13 +36,24 @@ function $FactionEntity(modEntity) {
  * @returns {Internal.Mob}
  */
 $FactionEntity.prototype.getEntity = function () {
-    return this.mobEntity;
+    return this.entity;
 }
 /**
  * @description 获取派系
  * @returns {$Faction}
  */
 $FactionEntity.prototype.getFaction = function () {
+    // /**
+    //  * debug fix
+    //  */
+    // if (this.faction == undefined) {
+    //     console.log(`修正 Entity Data ${this.entity.getPersistentData().toString()}`);
+    //     this.faction = $Factions.GAIA;
+    //     // console.log(`修正类型 ${this.faction instanceof $Faction}`);
+    // } else {
+    //     console.log(`无需修正Entity Data ${this.entity.getPersistentData().toString()}`);
+    //     // console.log("类型无需修正");
+    // }
     return this.faction;
 }
 
@@ -64,7 +81,7 @@ $FactionEntity.prototype.deserializeNBT = function (compoundTag) {
             this.faction = $Factions.getFaction(new ResourceLocation(factionEntityNBT.getString("Faction")));
         }
         if (factionEntityNBT.contains("FactionEntityType")) {
-            this.faction = $FactionEntityTypes.getFactionEntityType(new ResourceLocation(factionEntityNBT.getString(FactionEntityType)));
+            this.factionEntityType = $FactionEntityTypes.getFactionEntityType(new ResourceLocation(factionEntityNBT.getString("FactionEntityType")));
         }
     }
 }
@@ -93,14 +110,14 @@ $FactionEntity.prototype.serializeNBT = function () {
  * @description 加载 将从实体NBT中尝试初始化
  */
 $FactionEntity.prototype.load = function () {
-    this.deserializeNBT(this.mobEntity.getPersistentData());
+    this.deserializeNBT(this.entity.getPersistentData());
 }
 
 /**
  * @description 保存 将序列化后的nbt合并至实体nbt上
  */
 $FactionEntity.prototype.save = function () {
-    this.mobEntity.getPersistentData().merge(this.serializeNBT());
+    this.entity.getPersistentData().merge(this.serializeNBT());
 }
 
 
@@ -117,18 +134,18 @@ $FactionEntity.addFactionEntity = function (factionEntity) {
 
 /**
  * @description 尝试从Map获取给定实体的FactionEntity实例
- * @param {Internal.LivingEntity} livingEntity 
+ * @param {Internal.Mob} mobEntity 
  * @returns {$FactionEntity | undefined}
  */
-$FactionEntity.getFactionEntity = function (livingEntity) {
-    return this.VALUES.get(String(livingEntity.getStringUuid()));
+$FactionEntity.getFactionEntity = function (mobEntity) {
+    return this.VALUES.get(String(mobEntity.getStringUuid()));
 }
 
 /**
  * @description 删除给定实体的FactionEntity
- * @param {Internal.LivingEntity} livingEntity 
+ * @param {Internal.Mob} mobEntity 
  * @returns {boolean} 
  */
-$FactionEntity.removeFactionEntity = function (livingEntity) {
-    return this.VALUES.delete(String(livingEntity.getStringUuid()))
+$FactionEntity.removeFactionEntity = function (mobEntity) {
+    return this.VALUES.delete(String(mobEntity.getStringUuid()))
 }
