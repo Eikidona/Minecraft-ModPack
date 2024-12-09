@@ -7,8 +7,8 @@ PlayerEvents.chat(event => {
     if (event.message == "f") {
         player.tell(`已输出调试数据 ${player instanceof Mob}`);
         // console.log(`${serverLevel.getPersistentData().toString()}`)
-        console.log(`Typeof ${$Factions.GAIA instanceof $Faction}`);
-        
+        console.log(`Typeof ${$Factions.NONE instanceof $Faction}`);
+
     }
 })
 /**@type {$Faction} */
@@ -21,17 +21,20 @@ ItemEvents.entityInteracted(event => {
      */
     let mobEntity = event.target;
     if (!mobEntity instanceof Mob || event.hand != "main_hand") return;
-    if (!sourcefaction) {
-        event.player.tell("源派系已保存")
-        sourcefaction = $FactionEntityHelper.getFactionEntity(mobEntity).getFaction();
-    } else if (!targetfaction) {
-        event.player.tell("目标派系已保存")
-        targetfaction = $FactionEntityHelper.getFactionEntity(mobEntity).getFaction();
-    } else {
-        event.player.tell("输出结果")
-        event.player.tell(sourcefaction.isEnemyOf(targetfaction));
-        sourcefaction = undefined;
-        targetfaction = undefined;
-    }
-    
+
+    event.player.tell($FactionEntityHelper.getFactionEntity(mobEntity).getFaction().getName())
+
+    // if (!sourcefaction) {
+    //     event.player.tell("源派系已保存")
+    //     sourcefaction = $FactionEntityHelper.getFactionEntity(mobEntity).getFaction();
+    // } else if (!targetfaction) {
+    //     event.player.tell("目标派系已保存")
+    //     targetfaction = $FactionEntityHelper.getFactionEntity(mobEntity).getFaction();
+    // } else {
+    //     event.player.tell("输出结果")
+    //     event.player.tell(sourcefaction.isEnemyOf(targetfaction));
+    //     sourcefaction = undefined;
+    //     targetfaction = undefined;
+    // }
+
 })

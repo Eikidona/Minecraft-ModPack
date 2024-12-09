@@ -84,10 +84,10 @@ $FactionRelation.prototype.serializeNBT = function () {
     compoundTag.putString("FactionName", String(this.getFactionName()));
     compoundTag.putInt("Relation", this.getRelation());
 
-    /**
-     * debug
-     */
-    console.log(`FactionRelation serializeNBT: ${compoundTag.toString()}`);
+    // /**
+    //  * debug
+    //  */
+    // console.log(`FactionRelation serializeNBT: ${compoundTag.toString()}`);
 
     return compoundTag;
 }

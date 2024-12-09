@@ -1,9 +1,0 @@
-{
-  "type": "apoli:prevent_sleep",
-  "block_condition": {
-    "type": "apoli:height",
-    "compare_to": 86,
-    "comparison": "<"
-  },
-  "message": "origins.avian_sleep_fail"
-}

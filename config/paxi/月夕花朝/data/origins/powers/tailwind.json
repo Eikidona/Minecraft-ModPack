@@ -1,9 +1,0 @@
-{
-  "type": "apoli:attribute",
-  "modifier": {
-    "attribute": "minecraft:generic.movement_speed",
-    "name": "Tailwind speed bonus",
-    "operation": "multiply_base",
-    "value": 0.2
-  }
-}

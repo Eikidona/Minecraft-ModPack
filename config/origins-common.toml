@@ -91,3 +91,18 @@
 		"origins:like_air" = true
 		enabled = false
 
+	[origins."modpack:example"]
+		enabled = true
+
+	[origins."modpack:holy_knight"]
+		enabled = true
+
+	[origins."modpack:magician"]
+		enabled = true
+
+	[origins."modpack:berserkers"]
+		enabled = true
+
+	[origins."modpack:warrior"]
+		enabled = true
+

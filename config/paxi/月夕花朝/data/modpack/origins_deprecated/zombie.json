@@ -1,9 +1,0 @@
-{
-    "icon": {
-        "item": "minecraft:zombie_head"
-    },
-    "order": 3,
-    "impact": 2,
-    "name": "Zombie",
-    "description": "Raah, brains..."
-}

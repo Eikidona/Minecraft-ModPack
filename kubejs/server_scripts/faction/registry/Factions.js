@@ -29,7 +29,7 @@ $Factions.getFaction = function (name) {
     //  * debug
     //  */
     // console.log(`调用此处: 类型判断: <faction: ${faction instanceof $Faction}> | <GAIA: ${this.GAIA instanceof $Faction}}>`)
-    return faction ? faction : this.GAIA;
+    return faction ? faction : this.NONE;
 }
 
 /**
@@ -95,4 +95,4 @@ $Factions.load = function (server) {
     this.deserializeNBT(data);
 }
 
-$Factions.GAIA = $Factions.register(new $Faction(new ResourceLocation("faction:gaia"), $FactionRelations.DEFAULT));
+$Factions.NONE = $Factions.register(new $Faction(new ResourceLocation("faction:none"), $FactionRelations.DEFAULT));

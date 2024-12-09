@@ -1,5 +1,0 @@
-{
-  "type": "apoli:attribute_modify_transfer",
-  "attribute": "minecraft:generic.movement_speed",
-  "class": "apoli:modify_air_speed"
-}

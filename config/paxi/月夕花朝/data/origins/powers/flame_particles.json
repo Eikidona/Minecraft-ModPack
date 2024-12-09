@@ -1,9 +1,0 @@
-{
-  "type": "apoli:particle",
-  "frequency": 4,
-  "hidden": true,
-  "particle": {
-    "type": "minecraft:flame",
-    "params": ""
-  }
-}

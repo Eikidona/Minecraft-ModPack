@@ -4,8 +4,9 @@
  * @param {string} name 
  * @param {$FactionRelations} relations 
  * @param {$RaidConfig} raidConfig 
+ * @param {$WeightTable<$FactionEntityType>} factionEntityTypeWeightTable 
  */
-function $Faction(name, relations, raidConfig) {
+function $Faction(name, relations, raidConfig, factionEntityTypeWeightTable) {
     /**@type {ResourceLocation} */
     this.name = name;
     /**@type {$FactionRelations} */
@@ -15,6 +16,10 @@ function $Faction(name, relations, raidConfig) {
      * @type {$RaidConfig}
      */
     this.raidConfig = raidConfig;
+    /**
+     * @description 权重表
+     */
+    this.factionEntityTypeWeightTable = factionEntityTypeWeightTable;
 }
 
 /**
@@ -23,6 +28,13 @@ function $Faction(name, relations, raidConfig) {
  */
 $Faction.prototype.getName = function () {
     return this.name;
+}
+
+/**
+ * @description 获取派系实体权重表
+ */
+$Faction.prototype.getFactionEntityTypeWeightTable = function () {
+    return this.factionEntityTypeWeightTable;
 }
 
 /**
@@ -49,6 +61,7 @@ $Faction.prototype.isEnemyOf = function (faction) {
 $Faction.prototype.getRaidComponent = function () {
     return this.raidConfig.getRaidComponent();
 }
+
 /**
  * @description 胜利显示组件
  * @returns {Internal.MutableComponent}
@@ -56,6 +69,7 @@ $Faction.prototype.getRaidComponent = function () {
 $Faction.prototype.getVictoryComponent = function () {
     return this.raidConfig.getVictoryComponent();
 }
+
 /**
  * @description 失败显示组件
  * @returns {Internal.MutableComponent}
@@ -63,6 +77,7 @@ $Faction.prototype.getVictoryComponent = function () {
 $Faction.prototype.getDefeatComponent = function () {
     return this.raidConfig.getDefeatComponent();
 }
+
 /**
  * @description 序列化
  * @returns {Internal.CompoundTag}
@@ -73,10 +88,10 @@ $Faction.prototype.serializeNBT = function () {
     compoundTag.putString("Name", String(this.getName()));
     compoundTag.merge(relationsListTag);
 
-    /**
-     * debug
-     */
-    console.log(`$Faction serializeNBT: ${compoundTag.toString()}`);
+    // /**
+    //  * debug
+    //  */
+    // console.log(`$Faction serializeNBT: ${compoundTag.toString()}`);
 
     return compoundTag;
 }
@@ -93,4 +108,14 @@ $Faction.prototype.deserializeNBT = function (compoundTag) {
         relations.deserializeNBT(compoundTag);
         this.relations = relations;
     }
+}
+
+/**
+ * @static
+ * @returns {$Faction}
+ * @param {string} name
+ * @param  {{allies:string[], enemies:string[]}} relations
+ */
+$Faction.create = function (name, relations, raidConfig, factionEntityTypeWeightTable) {
+    
 }

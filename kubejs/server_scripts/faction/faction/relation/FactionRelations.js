@@ -124,10 +124,10 @@ $FactionRelations.prototype.serializeNBT = function () {
     });
     compoundTag.put("Relations", relationsListTag);
 
-    /**
-     * debug
-     */
-    console.log(`FactionRelations serializeNBT: ${compoundTag.toString()}`);
+    // /**
+    //  * debug
+    //  */
+    // console.log(`FactionRelations serializeNBT: ${compoundTag.toString()}`);
 
     return compoundTag;
 }
@@ -145,7 +145,17 @@ $FactionRelations.prototype.deserializeNBT = function (compoundTag) {
         })
     }
 }
-
+/**
+ * 
+ * @param {{allies:string[], enemies:string[]}} relations
+ * @returns {$FactionRelations}
+ */
+$FactionRelations.create = function (relations) {
+    return new $FactionRelations(
+        relations.allies.map(factionName => new ResourceLocation(factionName)),
+        relations.enemies.map(factionName => new ResourceLocation(factionName))
+    )
+}
 /**
  * 默认关系对象
  */
