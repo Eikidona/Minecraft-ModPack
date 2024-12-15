@@ -20,5 +20,12 @@ const $Utils = {
         create: function (weightEntries) {
             return new $WeightTable(weightEntries.map(entry =>new $WeightEntry(entry.element, entry.weight)))
         }
+    },
+    /**
+     * @description 转换为ResourceLocation格式字符串
+     * @param {ResourceLocation_} name 
+     */
+    toRegistryName: function (name) {
+        return typeof name == "string" ? String(new ResourceLocation(name)) : String(name);
     }
 }

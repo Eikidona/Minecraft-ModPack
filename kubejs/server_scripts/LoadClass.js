@@ -18,9 +18,15 @@ const NaturalSpawner = Java.loadClass("net.minecraft.world.level.NaturalSpawner"
 const SpawnPlacements = Java.loadClass("net.minecraft.world.entity.SpawnPlacements");
 const ClientboundSoundPacket = Java.loadClass("net.minecraft.network.protocol.game.ClientboundSoundEntityPacket");
 const SoundSource = Java.loadClass("net.minecraft.sounds.SoundSource");
+
+const MinecraftServer = Java.loadClass("net.minecraft.server.MinecraftServer");
 const GameRules = Java.loadClass("net.minecraft.world.level.GameRules");
 const Heightmap$Types = Java.loadClass("net.minecraft.world.level.levelgen.Heightmap$Types");
 const MutableBlockPos = Java.loadClass("net.minecraft.core.BlockPos$MutableBlockPos");
+/**
+ * NBT
+ */
+const Tag = Java.loadClass("net.minecraft.nbt.Tag");
 const CompoundTag = Java.loadClass('net.minecraft.nbt.CompoundTag');
 const StringTag = Java.loadClass('net.minecraft.nbt.StringTag');
 const CollectionTag = Java.loadClass('net.minecraft.nbt.CollectionTag');
