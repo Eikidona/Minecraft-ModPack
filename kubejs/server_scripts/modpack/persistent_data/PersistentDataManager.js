@@ -4,14 +4,17 @@
 function $PersistentDataManager() {
   /**
    * @type {Internal.Map<(Internal.Entity | Internal.ServerLevel | Internal.MinecraftServer), $IPersistentDataProvider>}
+   * @private
    */
-  this.dataProviders = Utils.newMap()
+  this.dataProviders = Utils.newMap();
 }
 /**
  * @description 获取对象的DataProvider
  * @param {(Internal.Entity | Internal.ServerLevel | Internal.MinecraftServer)} object 
+ * @returns {$PersistentDataProvider}
  */
 $PersistentDataManager.prototype.getDataProvider = function (object) {
+  // 尝试在Map中查询 如果没有找到则返回返回新实例，并从实体PersistentData反序列化
   return this.dataProviders.computeIfAbsent(object, () => {
     let dataProvider = new $PersistentDataProvider();
     dataProvider.deserializeNBT(object.getPersistentData());

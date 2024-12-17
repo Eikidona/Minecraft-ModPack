@@ -8,10 +8,4 @@ function $Modpack() { }
  * @static
  * @type {$IEventBus}
  */
-$Modpack.EVENT_BUS = $EventBusBuilder.builder().build();
-/**
- * @param {$IModule} module
- */
-$Modpack.addModule = function (module) {
-  
-}
+$Modpack.EVENT_BUS = $IEventBusBuilder.builder().build();

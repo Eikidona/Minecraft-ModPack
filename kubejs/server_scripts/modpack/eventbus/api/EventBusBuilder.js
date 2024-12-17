@@ -14,11 +14,3 @@ $EventBusBuilder.prototype = {
     return new $EventBus();
   }
 }
-
-/**
- * @description 获取EventBusBuilder
- * @returns {$IEventBusBuilder}
- */
-$EventBusBuilder.builder = function () {
-  return new $EventBusBuilder();
-}

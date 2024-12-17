@@ -6,7 +6,7 @@ function $RegisterPersistentDataEvent() {
   /**
    * @description
    * @private
-   * @type {Internal.Map<ResourceLocation, () => $IPersistentData>}
+   * @type {Internal.Map<ResourceLocation, Internal.Supplier_<$IPersistentData>>}
    */
   this.datas = Utils.newMap();
   $Event.call(this);
@@ -25,8 +25,8 @@ $RegisterPersistentDataEvent.prototype.constructor = $RegisterPersistentDataEven
 
 /**
  * @description 注册
- * @param {ResourceLocation} name
- * @param {() => $IPersistentData} dataSupplier
+ * @param {ResourceLocation} name 
+ * @param {Internal.Supplier_<$IPersistentData>} dataSupplier
  */
 $RegisterPersistentDataEvent.prototype.register = function (name, dataSupplier) {
   this.datas.put(name, dataSupplier);

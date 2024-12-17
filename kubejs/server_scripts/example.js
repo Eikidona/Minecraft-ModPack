@@ -57,10 +57,11 @@ ItemEvents.entityInteracted(event => {
   // hashMap.put(new ResourceLocation("test"), "Hello");
   // event.player.tell(`${hashMap.get(new ResourceLocation("test"))}`);
 
+  // 测试自定义Data
   /**@type {$IFactionEntity} */
-  let data = $PersistentDataHelper.get(event.getTarget(), $FactionEntity.NAME);
+  let data = $PersistentDataHelper.getData(event.getTarget(), $FactionEntity.NAME);
 
   event.player.tell(`${data instanceof $FactionEntityHandler} ${typeof data} ${Boolean(data)}`)
 })
-
-
+/**@type {Special.LootTable[]} */
+let rls = ["minecraft:chests/village/village_armorer"];

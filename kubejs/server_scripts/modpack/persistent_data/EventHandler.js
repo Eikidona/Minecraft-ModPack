@@ -3,7 +3,7 @@
  * 收集注册数据
  */
 ServerEvents.lowPriorityData(event => {
-  let datas = $EventFactory.gatherRegisterDatas();
+  let datas = $EventFactory.gatherRegisterData();
   for (const data of datas.entrySet()) {
     $Registries.PERSISTENT_DATA.register(data.getKey(), data.getValue());
   }
@@ -14,7 +14,10 @@ ServerEvents.lowPriorityData(event => {
  */
 ServerEvents.loaded(event => {
   let { server } = event;
-  $PersistentDataManager.INSTANCE.load(server);
+  let datas = $EventFactory.gatherAttachData(server);
+  let dataProvider = $PersistentDataManager.INSTANCE.getDataProvider(server);
+  datas.forEach((name, data) => dataProvider.addData(name, data));
+  // $PersistentDataManager.INSTANCE.load(server);
   $PersistentDataManager.INSTANCE.save(server);
 })
 ServerEvents.unloaded(event => {
@@ -27,7 +30,10 @@ ServerEvents.unloaded(event => {
  */
 LevelEvents.loaded(event => {
   let { level } = event;
-  $PersistentDataManager.INSTANCE.load(level);
+  let datas = $EventFactory.gatherAttachData(level);
+  let dataProvider = $PersistentDataManager.INSTANCE.getDataProvider(level);
+  datas.forEach((name, data) => dataProvider.addData(name, data));
+  // $PersistentDataManager.INSTANCE.load(level);
   $PersistentDataManager.INSTANCE.save(level);
 })
 LevelEvents.unloaded(event => {
@@ -40,7 +46,10 @@ LevelEvents.unloaded(event => {
  */
 EntityEvents.spawned(event => {
   let { entity } = event;
-  $PersistentDataManager.INSTANCE.load(entity);
+  let datas = $EventFactory.gatherAttachData(entity);
+  let dataProvider = $PersistentDataManager.INSTANCE.getDataProvider(entity);
+  datas.forEach((name, data) => dataProvider.addData(name, data));
+  // $PersistentDataManager.INSTANCE.load(entity);
   $PersistentDataManager.INSTANCE.save(entity);
 })
 EntityEvents.death(event => {
